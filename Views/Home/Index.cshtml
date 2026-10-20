@@ -1,0 +1,139 @@
+@model HomeViewModel
+@{ ViewData["Title"] = "Home"; }
+
+<section class="hero">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <span class="hero-badge mb-3"><i class="bi bi-shield-check me-1"></i> Trusted by 50,000+ patients</span>
+                @if (!string.IsNullOrEmpty(Model.PatientName))
+                {
+                    <p class="text-teal fw-semibold mb-1 mt-3"><i class="bi bi-person-check me-1"></i>Welcome back, @Model.PatientName!</p>
+                }
+                <h1 class="mt-3 mb-3">Your health, our <span class="text-gradient">first priority</span></h1>
+                <p class="lead text-muted mb-4">CarePlus Hospital brings experienced specialists, modern diagnostics and compassionate care together, so you can book an appointment in just a minute.</p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a asp-controller="Appointments" asp-action="Create" class="btn btn-primary btn-pill btn-lg"><i class="bi bi-calendar2-plus me-2"></i>Book Appointment</a>
+                    <a asp-controller="Doctors" asp-action="Index" class="btn btn-outline-primary btn-pill btn-lg">Find a Doctor</a>
+                </div>
+                @if (!string.IsNullOrEmpty(Model.LastSpecialization))
+                {
+                    <p class="mt-4 mb-0 small text-muted"><i class="bi bi-clock-history me-1"></i>Recently viewed specialization:
+                        <a asp-controller="Doctors" asp-action="Index" asp-route-specialization="@Model.LastSpecialization" class="fw-semibold">@Model.LastSpecialization</a></p>
+                }
+            </div>
+            <div class="col-lg-5">
+                <div class="hero-panel text-center">
+                    <div class="hero-icon text-gradient mb-2"><i class="bi bi-heart-pulse-fill"></i></div>
+                    <h5 class="mb-3">24x7 Emergency &amp; Trauma Care</h5>
+                    <div class="row g-3">
+                        <div class="col-4"><div class="stat-tile"><strong>50+</strong><small class="text-muted">Doctors</small></div></div>
+                        <div class="col-4"><div class="stat-tile"><strong>25+</strong><small class="text-muted">Years</small></div></div>
+                        <div class="col-4"><div class="stat-tile"><strong>200</strong><small class="text-muted">Beds</small></div></div>
+                    </div>
+                    <p class="small text-muted mt-3 mb-0"><i class="bi bi-telephone-fill text-teal me-1"></i>Emergency: +91 98765 43210</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <h2 class="section-title mb-3">Welcome to CarePlus Hospital</h2>
+                <p class="text-muted">For over two decades we have delivered advanced medical care with warmth and respect. Our multidisciplinary team, modern operation theatres and 24x7 emergency services make us a dependable partner for your family's health.</p>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-teal me-2"></i>Experienced, qualified specialists</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-teal me-2"></i>Transparent consultation charges in ₹</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-teal me-2"></i>Easy online appointment booking</li>
+                </ul>
+            </div>
+            <div class="col-lg-6">
+                <div class="row g-3">
+                    <div class="col-6"><div class="card hover-lift p-4 text-center"><i class="bi bi-people fs-1 text-gradient"></i><h4 class="mb-0 mt-2">50,000+</h4><small class="text-muted">Happy Patients</small></div></div>
+                    <div class="col-6"><div class="card hover-lift p-4 text-center"><i class="bi bi-award fs-1 text-gradient"></i><h4 class="mb-0 mt-2">15+</h4><small class="text-muted">Awards</small></div></div>
+                    <div class="col-6"><div class="card hover-lift p-4 text-center"><i class="bi bi-hospital fs-1 text-gradient"></i><h4 class="mb-0 mt-2">20+</h4><small class="text-muted">Departments</small></div></div>
+                    <div class="col-6"><div class="card hover-lift p-4 text-center"><i class="bi bi-clock fs-1 text-gradient"></i><h4 class="mb-0 mt-2">24x7</h4><small class="text-muted">Emergency Care</small></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section-alt">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Our Hospital Services</h2>
+            <p class="section-sub">Comprehensive care under one roof, from routine check-ups to advanced treatment.</p>
+        </div>
+        <div class="row g-4">
+            @{
+                var services = new (string Icon, string Title, string Text)[]
+                {
+                    ("bi-heart-pulse", "Cardiology", "Heart check-ups, ECG, echo and cardiac rehabilitation."),
+                    ("bi-activity", "Neurology", "Diagnosis and treatment of brain, nerve and spine conditions."),
+                    ("bi-emoji-smile", "Pediatrics", "Child-friendly care, vaccination and growth monitoring."),
+                    ("bi-bandaid", "Orthopedics", "Joint replacement, fracture care and sports medicine."),
+                    ("bi-truck-front", "Emergency Care", "24x7 ambulance, trauma and critical care services."),
+                    ("bi-clipboard2-pulse", "Diagnostics &amp; Lab", "Advanced pathology, X-ray, MRI and CT scan facilities.")
+                };
+            }
+            @foreach (var s in services)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card service-card h-100 p-4">
+                        <div class="service-icon"><i class="bi @s.Icon"></i></div>
+                        <h5>@Html.Raw(s.Title)</h5>
+                        <p class="text-muted mb-0">@s.Text</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-2">
+            <div>
+                <h2 class="section-title mb-1">Featured Doctors</h2>
+                <p class="text-muted mb-0">Meet some of our leading specialists.</p>
+            </div>
+            <a asp-controller="Doctors" asp-action="Index" class="btn btn-outline-primary btn-pill">View All Doctors</a>
+        </div>
+        <div class="row g-4">
+            @foreach (var doctor in Model.FeaturedDoctors)
+            {
+                <div class="col-md-6 col-lg-4"><partial name="_DoctorCard" model="doctor" /></div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="section pt-0">
+    <div class="container">
+        <div class="cta-box">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-8">
+                    <h3 class="mb-2">Need to see a doctor?</h3>
+                    <p class="mb-0 opacity-75">Book your appointment online in under a minute. Quick, simple and secure.</p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <a asp-controller="Appointments" asp-action="Create" class="btn btn-light btn-pill btn-lg text-primary fw-semibold">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section-alt">
+    <div class="container">
+        <div class="row g-4 text-center">
+            <div class="col-md-4"><div class="card p-4 h-100"><div class="info-icon mx-auto mb-3"><i class="bi bi-geo-alt"></i></div><h6>Address</h6><p class="text-muted mb-0">123 Health Avenue, Medical Square, India</p></div></div>
+            <div class="col-md-4"><div class="card p-4 h-100"><div class="info-icon mx-auto mb-3"><i class="bi bi-telephone"></i></div><h6>Phone</h6><p class="text-muted mb-0">+91 98765 43210</p></div></div>
+            <div class="col-md-4"><div class="card p-4 h-100"><div class="info-icon mx-auto mb-3"><i class="bi bi-envelope"></i></div><h6>Email</h6><p class="text-muted mb-0">info@careplushospital.in</p></div></div>
+        </div>
+    </div>
+</section>

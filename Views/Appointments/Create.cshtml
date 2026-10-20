@@ -1,0 +1,104 @@
+@model AppointmentFormViewModel
+@{
+    ViewData["Title"] = "Book Appointment";
+    var today = DateTime.Today.ToString("yyyy-MM-dd");
+    var timeItems = AppointmentFormViewModel.TimeSlots.Select(t => new SelectListItem(t, t)).ToList();
+    var doctorItems = Model.Doctors.Select(d => new SelectListItem($"{d.DoctorName} - {d.Specialization}", d.DoctorId.ToString())).ToList();
+}
+
+<section class="page-header">
+    <div class="container"><h1>Book an <span class="text-gradient">Appointment</span></h1><p class="text-muted mb-0 mt-2">Fill in the details below and we will confirm your slot instantly.</p></div>
+</section>
+
+<div class="container pb-4">
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card form-card"><div class="card-body p-4 p-md-5">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="PatientName" class="form-label"></label>
+                            <input asp-for="PatientName" class="form-control" placeholder="Full name" />
+                            <span asp-validation-for="PatientName" class="field-validation-error"></span>
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="Age" class="form-label"></label>
+                            <input asp-for="Age" type="number" min="1" max="120" class="form-control" placeholder="Age" />
+                            <span asp-validation-for="Age" class="field-validation-error"></span>
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="PhoneNumber" class="form-label"></label>
+                            <input asp-for="PhoneNumber" type="tel" maxlength="10" class="form-control" placeholder="10-digit mobile" />
+                            <span asp-validation-for="PhoneNumber" class="field-validation-error"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="DoctorId" class="form-label"></label>
+                            @if (Model.SelectedDoctor != null)
+                            {
+                                @* Hidden field submits the DoctorId with the form *@
+                                <input asp-for="DoctorId" type="hidden" />
+                                <div class="input-group">
+                                    <input class="form-control" value="@Model.SelectedDoctor.DoctorName - @Model.SelectedDoctor.Specialization" readonly />
+                                    <a asp-controller="Doctors" asp-action="Index" class="btn btn-outline-primary">Change</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <select asp-for="DoctorId" asp-items="doctorItems" class="form-select"><option value="">Select a doctor</option></select>
+                            }
+                            <span asp-validation-for="DoctorId" class="field-validation-error"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="AppointmentDate" class="form-label"></label>
+                            <input asp-for="AppointmentDate" type="date" min="@today" class="form-control" />
+                            <span asp-validation-for="AppointmentDate" class="field-validation-error"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="AppointmentTime" class="form-label"></label>
+                            <select asp-for="AppointmentTime" asp-items="timeItems" class="form-select"><option value="">Select a time slot</option></select>
+                            <span asp-validation-for="AppointmentTime" class="field-validation-error"></span>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Symptoms" class="form-label"></label>
+                            <textarea asp-for="Symptoms" rows="4" class="form-control" placeholder="Describe the symptoms or reason for the visit"></textarea>
+                            <span asp-validation-for="Symptoms" class="field-validation-error"></span>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-pill btn-lg"><i class="bi bi-check2-circle me-1"></i> Confirm Appointment</button>
+                        </div>
+                    </div>
+                </form>
+            </div></div>
+        </div>
+
+        <div class="col-lg-4">
+            @if (Model.SelectedDoctor != null)
+            {
+                <div class="card mb-3"><div class="card-body p-4">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="doctor-avatar" style="width:4rem;height:4rem;font-size:1.8rem"><i class="bi @Model.SelectedDoctor.IconClass"></i></div>
+                        <div><h6 class="mb-0">@Model.SelectedDoctor.DoctorName</h6><small class="text-muted">@Model.SelectedDoctor.Specialization</small></div>
+                    </div>
+                    <div class="fee-row"><span class="text-muted">Consultation Fee</span><span>@Model.SelectedDoctor.ConsultationFee.ToRupees()</span></div>
+                    <div class="fee-row"><span class="text-muted">Service Charge</span><span>@DoctorExtensions.ServiceCharge.ToRupees()</span></div>
+                    <div class="fee-total"><span>Total</span><span>@Model.SelectedDoctor.CalculateTotalCharge().ToRupees()</span></div>
+                </div></div>
+            }
+            <div class="card"><div class="card-body p-4">
+                <h6 class="mb-3"><i class="bi bi-info-circle text-teal me-2"></i>Good to know</h6>
+                <ul class="text-muted small ps-3 mb-0">
+                    <li class="mb-2">Please arrive 15 minutes before your slot.</li>
+                    <li class="mb-2">Carry previous reports and prescriptions.</li>
+                    <li>Charges are payable at the hospital counter.</li>
+                </ul>
+            </div></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

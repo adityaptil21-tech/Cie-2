@@ -1,0 +1,56 @@
+@model PostsViewModel
+@{ ViewData["Title"] = "Posts"; }
+
+<section class="page-header">
+    <div class="container">
+        <h1>Health <span class="text-gradient">Posts</span></h1>
+        <p class="text-muted mb-0 mt-2">Posts fetched asynchronously from the JSONPlaceholder API.</p>
+    </div>
+</section>
+
+<div class="container pb-4">
+    @if (Model.ErrorMessage != null)
+    {
+        <div class="alert alert-danger d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <span><i class="bi bi-wifi-off me-2"></i>@Model.ErrorMessage</span>
+            <a asp-action="Index" class="btn btn-sm btn-outline-danger btn-pill"><i class="bi bi-arrow-clockwise me-1"></i>Retry</a>
+        </div>
+    }
+    else
+    {
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+            <span class="badge badge-specialty fs-6">@Model.Posts.Count posts loaded</span>
+            <div class="input-group" style="max-width:22rem">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input id="postSearch" type="search" class="form-control" placeholder="Search by ID or title" />
+            </div>
+        </div>
+        <div class="table-card">
+            <div class="table-responsive table-scroll">
+                <table id="postsTable" class="table table-hover align-middle mb-0">
+                    <thead><tr><th style="width:6rem">ID</th><th>Title</th></tr></thead>
+                    <tbody>
+                        @foreach (var post in Model.Posts)
+                        {
+                            <tr><td class="fw-semibold">@post.Id</td><td>@post.Title</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        var searchBox = document.getElementById('postSearch');
+        if (searchBox) {
+            searchBox.addEventListener('input', function () {
+                var q = this.value.toLowerCase();
+                document.querySelectorAll('#postsTable tbody tr').forEach(function (row) {
+                    row.style.display = row.innerText.toLowerCase().indexOf(q) > -1 ? '' : 'none';
+                });
+            });
+        }
+    </script>
+}

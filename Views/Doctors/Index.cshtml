@@ -1,0 +1,33 @@
+@model DoctorListViewModel
+@{ ViewData["Title"] = "Our Doctors"; }
+
+<section class="page-header">
+    <div class="container">
+        <h1>Our <span class="text-gradient">Doctors</span></h1>
+        <p class="text-muted mb-0 mt-2">Experienced specialists ready to care for you. All fees are in Indian rupees (₹).</p>
+    </div>
+</section>
+
+<div class="container pb-4">
+    <div class="d-flex flex-wrap gap-2 mb-4">
+        <a asp-action="Index" class="chip @(Model.SelectedSpecialization == null ? "active" : "")">All</a>
+        @foreach (var spec in Model.Specializations)
+        {
+            <a asp-action="Index" asp-route-specialization="@spec" class="chip @(Model.SelectedSpecialization == spec ? "active" : "")">@spec</a>
+        }
+    </div>
+
+    @if (!Model.Doctors.Any())
+    {
+        <div class="alert alert-info"><i class="bi bi-info-circle me-2"></i>No doctors found for this specialization.</div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var doctor in Model.Doctors)
+            {
+                <div class="col-sm-6 col-lg-4 col-xl-3"><partial name="_DoctorCard" model="doctor" /></div>
+            }
+        </div>
+    }
+</div>

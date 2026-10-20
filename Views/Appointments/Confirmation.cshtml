@@ -1,0 +1,43 @@
+@model Appointment
+@{ ViewData["Title"] = "Appointment Confirmed"; }
+
+<section class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card"><div class="card-body p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <div class="success-ring"><i class="bi bi-check-lg"></i></div>
+                    <h2 class="mb-1">Appointment Confirmed</h2>
+                    <p class="text-muted mb-0">Thank you, @Model.PatientName. Your booking details are below.</p>
+                    <span class="badge badge-specialty mt-3">Reference: @Model.ReferenceNumber</span>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <tbody>
+                            <tr><th class="text-muted fw-normal w-40">Patient Name</th><td>@Model.PatientName</td></tr>
+                            <tr><th class="text-muted fw-normal">Age</th><td>@Model.Age years</td></tr>
+                            <tr><th class="text-muted fw-normal">Phone</th><td>+91 @Model.PhoneNumber</td></tr>
+                            <tr><th class="text-muted fw-normal">Doctor</th><td>@Model.DoctorName <span class="badge badge-specialty ms-1">@Model.Specialization</span></td></tr>
+                            <tr><th class="text-muted fw-normal">Date</th><td>@Model.AppointmentDate.ToString("dddd, dd MMMM yyyy")</td></tr>
+                            <tr><th class="text-muted fw-normal">Time</th><td>@Model.AppointmentTime</td></tr>
+                            <tr><th class="text-muted fw-normal">Symptoms</th><td>@Model.Symptoms</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-3">
+                    <div class="fee-row"><span class="text-muted">Consultation Fee</span><span class="fw-semibold">@Model.ConsultationFee.ToRupees()</span></div>
+                    <div class="fee-row"><span class="text-muted">Service Charge</span><span class="fw-semibold">@Model.ServiceCharge.ToRupees()</span></div>
+                    <div class="fee-total"><span>Total Consultation Charges</span><span>@Model.TotalCharge.ToRupees()</span></div>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2 justify-content-center mt-4 no-print">
+                    <button type="button" class="btn btn-primary btn-pill" onclick="window.print()"><i class="bi bi-printer me-1"></i> Print</button>
+                    <a asp-action="Create" class="btn btn-outline-primary btn-pill">Book Another</a>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary btn-pill">Home</a>
+                </div>
+            </div></div>
+        </div>
+    </div>
+</section>

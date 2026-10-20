@@ -1,0 +1,47 @@
+@model Doctor
+@{ ViewData["Title"] = Model.DoctorName; }
+
+<section class="page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb"><ol class="breadcrumb mb-2">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Doctors</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.DoctorName</li>
+        </ol></nav>
+        <h1>Doctor <span class="text-gradient">Profile</span></h1>
+    </div>
+</section>
+
+<div class="container pb-4">
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card"><div class="card-body p-4 p-md-5">
+                <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-4 mb-4">
+                    <div class="doctor-avatar"><i class="bi @Model.IconClass"></i></div>
+                    <div>
+                        <span class="badge badge-specialty mb-2">@Model.Specialization</span>
+                        <h3 class="mb-1">@Model.DoctorName</h3>
+                        <p class="text-muted mb-0">@Model.Qualification</p>
+                    </div>
+                </div>
+                <h6>About</h6>
+                <p class="text-muted">@Model.About</p>
+                <div class="row g-3 mt-2">
+                    <div class="col-sm-6"><div class="d-flex gap-3"><div class="info-icon"><i class="bi bi-award"></i></div><div><small class="text-muted">Experience</small><div class="fw-semibold">@Model.Experience years</div></div></div></div>
+                    <div class="col-sm-6"><div class="d-flex gap-3"><div class="info-icon"><i class="bi bi-calendar-week"></i></div><div><small class="text-muted">Available</small><div class="fw-semibold">@Model.AvailableDays</div></div></div></div>
+                    <div class="col-sm-6"><div class="d-flex gap-3"><div class="info-icon"><i class="bi bi-hash"></i></div><div><small class="text-muted">Doctor ID</small><div class="fw-semibold">@Model.DoctorId</div></div></div></div>
+                </div>
+            </div></div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card"><div class="card-body p-4">
+                <h5 class="mb-3"><i class="bi bi-receipt text-teal me-2"></i>Consultation Charges</h5>
+                <div class="fee-row"><span class="text-muted">Consultation Fee</span><span class="fw-semibold">@Model.ConsultationFee.ToRupees()</span></div>
+                <div class="fee-row"><span class="text-muted">Service Charge</span><span class="fw-semibold">@DoctorExtensions.ServiceCharge.ToRupees()</span></div>
+                <div class="fee-total"><span>Total Amount</span><span>@Model.CalculateTotalCharge().ToRupees()</span></div>
+                <a asp-controller="Appointments" asp-action="Create" asp-route-doctorId="@Model.DoctorId" class="btn btn-primary btn-pill w-100 mt-4"><i class="bi bi-calendar2-plus me-1"></i> Book Appointment</a>
+                <a asp-action="Index" class="btn btn-outline-primary btn-pill w-100 mt-2"><i class="bi bi-arrow-left me-1"></i> Back to Doctors</a>
+            </div></div>
+        </div>
+    </div>
+</div>
